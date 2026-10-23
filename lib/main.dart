@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/titulo_secao.dart';
+import 'screens/clima_atual.dart';
+import 'screens/previsao_semana.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,76 +14,50 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('WeatherApp'),
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('ClimaApp'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Cidade atual
-            const TituloSecao(titulo: 'Cidade atual'),
-            const Text(
-              'Cidade de Cerulean, Kanto',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              'Terça-feira, 20 de outubro',
-              style: TextStyle(fontSize: 16),
-            ),
-
-            const Divider(),
-
-            // Temperatura
-            const TituloSecao(titulo: 'Temperatura'),
-            const Text(
-              '26°C',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
-              ),
-            ),
-            const Text(
-              'Sensação térmica: 28°C',
-              style: TextStyle(fontSize: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ClimaAtualScreen(),
+                  ),
+                );
+              },
+              child: const Text('Clima atual'),
             ),
 
-            const Divider(),
+            const SizedBox(height: 20),
 
-            // Condição do tempo
-            const TituloSecao(titulo: 'Condição do tempo'),
-            Image.network(
-              'https://picsum.photos/id/870/200/300?grayscale&blur=2',
-              height: 200,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrevisaoSemanaScreen(),
+                  ),
+                );
+              },
+              child: const Text('Previsão da semana'),
             ),
-
-            const Divider(),
-
-            // Detalhes
-            const TituloSecao(titulo: 'Detalhes'),
-
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.water_drop, size: 32, color: Colors.blue),
-                Icon(Icons.air, size: 32, color: Colors.grey),
-                Icon(Icons.umbrella, size: 32, color: Colors.purple),
-              ],
-            ),
-
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [Text('65%'), Text('12 km/h'), Text('30%')],
-            ),
-
-            const Divider(),
-
-            // Atualização
-            const TituloSecao(titulo: 'Atualização'),
-            ElevatedButton(onPressed: () {}, child: const Text('Atualizar')),
           ],
         ),
       ),

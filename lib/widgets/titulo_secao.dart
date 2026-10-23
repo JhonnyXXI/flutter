@@ -1,13 +1,9 @@
-
 import 'package:flutter/material.dart';
 
 class TituloSecao extends StatelessWidget {
   final String titulo;
 
-  const TituloSecao({
-    super.key,
-    required this.titulo,
-  });
+  const TituloSecao({super.key, required this.titulo});
 
   @override
   Widget build(BuildContext context) {

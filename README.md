@@ -1,17 +1,10 @@
-# weatherapp
 
-A new Flutter project.
+# ClimaApp
 
-## Getting Started
+## 1. Qual a diferença entre Expanded e Flexible?
 
-This project is a starting point for a Flutter application.
+O Expanded faz o elemento ocupar todo o espaço disponível, já o Flexible deixa o elemento se ajustar conforme o espaço que precisa.
 
-A few resources to get you started if this is your first Flutter project:
+## 2. O que acontece quando dois elementos na mesma Row ou Column têm valores de flex diferentes?
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O espaço é dividido conforme o valor de cada flex. Quem tiver o valor maior vai receber mais espaço. Por exemplo, flex 2 recebe o dobro de espaço do flex 1.
