@@ -3,13 +3,93 @@ import 'package:flutter/material.dart';
 import '../widgets/titulo_secao.dart';
 
 class PrevisaoSemanaScreen extends StatelessWidget {
-  const PrevisaoSemanaScreen({super.key});
+  final String cidade;
+
+  const PrevisaoSemanaScreen({super.key, this.cidade = 'Cerulean'});
 
   @override
   Widget build(BuildContext context) {
+    String minima = '18°C';
+    String media = '26°C';
+    String maxima = '31°C';
+    String manha = '20°C';
+    String tarde = '29°C';
+
+    List<String> temperaturas = [
+      '19°C',
+      '30°C',
+      '18°C',
+      '27°C',
+      '17°C',
+      '24°C',
+      '20°C',
+      '28°C',
+      '21°C',
+      '31°C',
+    ];
+
+    if (cidade == 'Pallet Town') {
+      minima = '20°C';
+      media = '27°C';
+      maxima = '32°C';
+      manha = '22°C';
+      tarde = '30°C';
+
+      temperaturas = [
+        '20°C',
+        '29°C',
+        '21°C',
+        '30°C',
+        '22°C',
+        '31°C',
+        '20°C',
+        '28°C',
+        '23°C',
+        '32°C',
+      ];
+    } else if (cidade == 'Pewter City') {
+      minima = '15°C';
+      media = '22°C';
+      maxima = '26°C';
+      manha = '17°C';
+      tarde = '24°C';
+
+      temperaturas = [
+        '17°C',
+        '25°C',
+        '16°C',
+        '23°C',
+        '15°C',
+        '22°C',
+        '18°C',
+        '26°C',
+        '17°C',
+        '24°C',
+      ];
+    } else if (cidade == 'Vermilion City') {
+      minima = '21°C';
+      media = '29°C';
+      maxima = '34°C';
+      manha = '24°C';
+      tarde = '32°C';
+
+      temperaturas = [
+        '21°C',
+        '31°C',
+        '22°C',
+        '32°C',
+        '23°C',
+        '33°C',
+        '22°C',
+        '30°C',
+        '24°C',
+        '34°C',
+      ];
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Previsão da semana'),
+        title: Text('Previsão - $cidade'),
         backgroundColor: Colors.blue,
       ),
 
@@ -25,22 +105,24 @@ class PrevisaoSemanaScreen extends StatelessWidget {
                 child: Container(
                   height: 60,
                   color: Colors.lightBlue,
-                  child: const Center(child: Text('18°C')),
+                  child: Center(child: Text(minima)),
                 ),
               ),
+
               Flexible(
                 flex: 2,
                 child: Container(
                   height: 60,
                   color: Colors.orange,
-                  child: const Center(child: Text('26°C')),
+                  child: Center(child: Text(media)),
                 ),
               ),
+
               Expanded(
                 child: Container(
                   height: 60,
                   color: Colors.redAccent,
-                  child: const Center(child: Text('31°C')),
+                  child: Center(child: Text(maxima)),
                 ),
               ),
             ],
@@ -59,14 +141,15 @@ class PrevisaoSemanaScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                     color: Colors.lightBlue,
-                    child: const Center(child: Text('Manhã: 20°C')),
+                    child: Center(child: Text('Manhã: $manha')),
                   ),
                 ),
+
                 Flexible(
                   flex: 2,
                   child: Container(
                     color: Colors.orangeAccent,
-                    child: const Center(child: Text('Tarde: 29°C')),
+                    child: Center(child: Text('Tarde: $tarde')),
                   ),
                 ),
               ],
@@ -78,43 +161,43 @@ class PrevisaoSemanaScreen extends StatelessWidget {
           // PRÓXIMOS DIAS
           const TituloSecao(titulo: 'Próximos dias'),
 
-          const LinhaPrevisao(
+          LinhaPrevisao(
             dia: 'Sexta',
             icone: Icons.wb_sunny,
-            minima: '19°C',
-            maxima: '30°C',
+            minima: temperaturas[0],
+            maxima: temperaturas[1],
             cor: Colors.orange,
           ),
 
-          const LinhaPrevisao(
+          LinhaPrevisao(
             dia: 'Sábado',
             icone: Icons.cloud,
-            minima: '18°C',
-            maxima: '27°C',
+            minima: temperaturas[2],
+            maxima: temperaturas[3],
             cor: Colors.blueGrey,
           ),
 
-          const LinhaPrevisao(
+          LinhaPrevisao(
             dia: 'Domingo',
             icone: Icons.water_drop,
-            minima: '17°C',
-            maxima: '24°C',
+            minima: temperaturas[4],
+            maxima: temperaturas[5],
             cor: Colors.blue,
           ),
 
-          const LinhaPrevisao(
+          LinhaPrevisao(
             dia: 'Segunda',
             icone: Icons.cloud,
-            minima: '20°C',
-            maxima: '28°C',
+            minima: temperaturas[6],
+            maxima: temperaturas[7],
             cor: Colors.blueGrey,
           ),
 
-          const LinhaPrevisao(
+          LinhaPrevisao(
             dia: 'Terça',
             icone: Icons.wb_sunny,
-            minima: '21°C',
-            maxima: '31°C',
+            minima: temperaturas[8],
+            maxima: temperaturas[9],
             cor: Colors.orange,
           ),
         ],
@@ -123,7 +206,7 @@ class PrevisaoSemanaScreen extends StatelessWidget {
   }
 }
 
-// WIDGET DOS PRÓXIMOS DIAS
+// WIDGET REUTILIZÁVEL
 class LinhaPrevisao extends StatelessWidget {
   final String dia;
   final IconData icone;
