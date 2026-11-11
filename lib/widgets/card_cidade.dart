@@ -1,33 +1,46 @@
 import 'package:flutter/material.dart';
 
+import '../models/cidade.dart';
+
 class CardCidade extends StatelessWidget {
-  final String nome;
-  final String temperatura;
-  final String minima;
-  final String maxima;
-  final IconData icone;
-  final Color cor;
+  final Cidade cidade;
   final VoidCallback aoClicar;
 
-  const CardCidade({
-    super.key,
-    required this.nome,
-    required this.temperatura,
-    required this.minima,
-    required this.maxima,
-    required this.icone,
-    required this.cor,
-    required this.aoClicar,
-  });
+  const CardCidade({super.key, required this.cidade, required this.aoClicar});
+
+  IconData escolherIcone(String condicao) {
+    final texto = condicao.toLowerCase();
+
+    if (texto.contains('chuv')) {
+      return Icons.water_drop;
+    }
+
+    if (texto.contains('nublado')) {
+      return Icons.cloud;
+    }
+
+    if (texto.contains('vento')) {
+      return Icons.air;
+    }
+
+    return Icons.wb_sunny;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(icone, color: cor),
-        title: Text(nome),
-        subtitle: Text('Mín: $minima | Máx: $maxima'),
-        trailing: Text(temperatura),
+        leading: Icon(
+          escolherIcone(cidade.condicao),
+          color: Colors.blue,
+          size: 30,
+        ),
+        title: Text(cidade.nome),
+        subtitle: Text(cidade.condicao),
+        trailing: Text(
+          '${cidade.temperatura}°C',
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         onTap: aoClicar,
       ),
     );

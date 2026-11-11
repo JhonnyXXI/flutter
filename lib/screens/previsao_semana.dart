@@ -1,249 +1,142 @@
 import 'package:flutter/material.dart';
 
+import '../models/cidade.dart';
 import '../widgets/titulo_secao.dart';
 
 class PrevisaoSemanaScreen extends StatelessWidget {
-  final String cidade;
+  final Cidade cidade;
 
-  const PrevisaoSemanaScreen({super.key, this.cidade = 'Cerulean'});
+  const PrevisaoSemanaScreen({super.key, required this.cidade});
+
+  IconData escolherIcone(String condicao) {
+    final texto = condicao.toLowerCase();
+
+    if (texto.contains('chuv')) {
+      return Icons.water_drop;
+    }
+
+    if (texto.contains('nublado')) {
+      return Icons.cloud;
+    }
+
+    if (texto.contains('vento')) {
+      return Icons.air;
+    }
+
+    return Icons.wb_sunny;
+  }
 
   @override
   Widget build(BuildContext context) {
-    String minima = '18°C';
-    String media = '26°C';
-    String maxima = '31°C';
-    String manha = '20°C';
-    String tarde = '29°C';
-
-    List<String> temperaturas = [
-      '19°C',
-      '30°C',
-      '18°C',
-      '27°C',
-      '17°C',
-      '24°C',
-      '20°C',
-      '28°C',
-      '21°C',
-      '31°C',
-    ];
-
-    if (cidade == 'Pallet Town') {
-      minima = '20°C';
-      media = '27°C';
-      maxima = '32°C';
-      manha = '22°C';
-      tarde = '30°C';
-
-      temperaturas = [
-        '20°C',
-        '29°C',
-        '21°C',
-        '30°C',
-        '22°C',
-        '31°C',
-        '20°C',
-        '28°C',
-        '23°C',
-        '32°C',
-      ];
-    } else if (cidade == 'Pewter City') {
-      minima = '15°C';
-      media = '22°C';
-      maxima = '26°C';
-      manha = '17°C';
-      tarde = '24°C';
-
-      temperaturas = [
-        '17°C',
-        '25°C',
-        '16°C',
-        '23°C',
-        '15°C',
-        '22°C',
-        '18°C',
-        '26°C',
-        '17°C',
-        '24°C',
-      ];
-    } else if (cidade == 'Vermilion City') {
-      minima = '21°C';
-      media = '29°C';
-      maxima = '34°C';
-      manha = '24°C';
-      tarde = '32°C';
-
-      temperaturas = [
-        '21°C',
-        '31°C',
-        '22°C',
-        '32°C',
-        '23°C',
-        '33°C',
-        '22°C',
-        '30°C',
-        '24°C',
-        '34°C',
-      ];
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Previsão - $cidade'),
+        title: Text('Previsão - ${cidade.nome}'),
         backgroundColor: Colors.blue,
       ),
-
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          TituloSecao(titulo: 'Previsão do tempo - ${cidade.nome}'),
+
+          const SizedBox(height: 8),
+
+          Text(
+            'Temperatura atual: ${cidade.temperatura}°C',
+            style: const TextStyle(fontSize: 16),
+          ),
+
+          const Divider(height: 32),
+
           // FAIXA DE TEMPERATURA
           const TituloSecao(titulo: 'Faixa de temperatura'),
 
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 60,
-                  color: Colors.lightBlue,
-                  child: Center(child: Text(minima)),
-                ),
-              ),
-
-              Flexible(
-                flex: 2,
-                child: Container(
-                  height: 60,
-                  color: Colors.orange,
-                  child: Center(child: Text(media)),
-                ),
-              ),
-
-              Expanded(
-                child: Container(
-                  height: 60,
-                  color: Colors.redAccent,
-                  child: Center(child: Text(maxima)),
-                ),
-              ),
-            ],
-          ),
-
-          const Divider(),
-
-          // RESUMO DO DIA
-          const TituloSecao(titulo: 'Resumo do dia'),
-
-          Container(
-            height: 200,
-            color: Colors.grey.shade200,
-            child: Column(
+          if (cidade.previsao.isNotEmpty)
+            Row(
               children: [
                 Expanded(
                   child: Container(
+                    height: 60,
                     color: Colors.lightBlue,
-                    child: Center(child: Text('Manhã: $manha')),
+                    child: Center(
+                      child: Text('${cidade.previsao.first.minima}°C'),
+                    ),
                   ),
                 ),
-
                 Flexible(
                   flex: 2,
                   child: Container(
-                    color: Colors.orangeAccent,
-                    child: Center(child: Text('Tarde: $tarde')),
+                    height: 60,
+                    color: Colors.orange,
+                    child: Center(child: Text('${cidade.temperatura}°C')),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 60,
+                    color: Colors.redAccent,
+                    child: Center(
+                      child: Text('${cidade.previsao.first.maxima}°C'),
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
 
-          const Divider(),
+          const Divider(height: 32),
 
           // PRÓXIMOS DIAS
           const TituloSecao(titulo: 'Próximos dias'),
 
-          LinhaPrevisao(
-            dia: 'Sexta',
-            icone: Icons.wb_sunny,
-            minima: temperaturas[0],
-            maxima: temperaturas[1],
-            cor: Colors.orange,
-          ),
+          ...cidade.previsao.map((dia) {
+            return Card(
+              child: ListTile(
+                leading: Icon(
+                  escolherIcone(dia.condicao),
+                  color: Colors.blue,
+                  size: 30,
+                ),
+                title: Text(dia.dia),
+                subtitle: Text(dia.condicao),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Máx: ${dia.maxima}°C'),
+                    Text('Mín: ${dia.minima}°C'),
+                  ],
+                ),
+              ),
+            );
+          }),
 
-          LinhaPrevisao(
-            dia: 'Sábado',
-            icone: Icons.cloud,
-            minima: temperaturas[2],
-            maxima: temperaturas[3],
-            cor: Colors.blueGrey,
-          ),
+          const Divider(height: 32),
 
-          LinhaPrevisao(
-            dia: 'Domingo',
-            icone: Icons.water_drop,
-            minima: temperaturas[4],
-            maxima: temperaturas[5],
-            cor: Colors.blue,
-          ),
+          // RESUMO CLIMÁTICO
+          const TituloSecao(titulo: 'Resumo climático'),
 
-          LinhaPrevisao(
-            dia: 'Segunda',
-            icone: Icons.cloud,
-            minima: temperaturas[6],
-            maxima: temperaturas[7],
-            cor: Colors.blueGrey,
-          ),
-
-          LinhaPrevisao(
-            dia: 'Terça',
-            icone: Icons.wb_sunny,
-            minima: temperaturas[8],
-            maxima: temperaturas[9],
-            cor: Colors.orange,
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.water_drop, color: Colors.blue),
+                  title: const Text('Umidade'),
+                  trailing: Text('${cidade.umidade}%'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.air),
+                  title: const Text('Vento'),
+                  trailing: Text('${cidade.vento} km/h'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.umbrella),
+                  title: const Text('Chuva'),
+                  trailing: Text('${cidade.chuva}%'),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-    );
-  }
-}
-
-// WIDGET REUTILIZÁVEL
-class LinhaPrevisao extends StatelessWidget {
-  final String dia;
-  final IconData icone;
-  final String minima;
-  final String maxima;
-  final Color cor;
-
-  const LinhaPrevisao({
-    super.key,
-    required this.dia,
-    required this.icone,
-    required this.minima,
-    required this.maxima,
-    required this.cor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            children: [
-              Expanded(flex: 2, child: Text(dia)),
-
-              Icon(icone, size: 28, color: cor),
-
-              Expanded(child: Center(child: Text(minima))),
-
-              Expanded(child: Center(child: Text(maxima))),
-            ],
-          ),
-        ),
-
-        const Divider(),
-      ],
     );
   }
 }
